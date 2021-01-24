@@ -19,8 +19,8 @@ function App() {
       if (playable && keyCode >= 65 && keyCode <= 90) {
         const letter = key.toLowerCase();
 
-        if (!!letter && selectedWord.includes(letter)) {
-          if (!!letter && !correctLetters.includes(letter)) {
+        if (selectedWord.includes(letter)) {
+          if (!correctLetters.includes(letter)) {
             setCorrectLetters((currentLetters: string[]) => [
               ...currentLetters,
               letter,
@@ -50,7 +50,7 @@ function App() {
     <div className="App">
       <Header />
       <div className="game-container">
-        <Figure />
+        <Figure wrongLetters={wrongLetters} />
         <WrongLetters wrongLetters={wrongLetters} />
         <Word selectedWord={selectedWord} correctLetters={correctLetters} />
       </div>
