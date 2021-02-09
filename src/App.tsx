@@ -4,6 +4,9 @@ import Figure from "./components/Figure";
 import Header from "./components/Header";
 import WrongLetters from "./components/WrongLetters";
 import Word from "./components/Word";
+import { showNotification as show } from "./helpers/helpers";
+import Popup from "./components/Popup";
+import Notification from "./components/Notification";
 
 const words = ["application", "programing", "interface", "wizard"];
 let selectedWord = words[Math.floor(Math.random() * words.length)];
@@ -12,6 +15,7 @@ function App() {
   const [playable, setPlayable] = useState(true);
   const [correctLetters, setCorrectLetters] = useState<string[]>([]);
   const [wrongLetters, setWrongLetters] = useState<string[]>([]);
+  const [showNotification, setShowNotification] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -26,7 +30,7 @@ function App() {
               letter,
             ]);
           } else {
-            // showNotification();
+            show(setShowNotification);
           }
         } else {
           if (!wrongLetters.includes(letter)) {
@@ -35,7 +39,7 @@ function App() {
               letter,
             ]);
           } else {
-            // showNotification();
+            show(setShowNotification);
           }
         }
       }
@@ -46,6 +50,16 @@ function App() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  const playAgain = () => {
+    setPlayable(true);
+
+    setCorrectLetters([]);
+    setWrongLetters([]);
+
+    const random = Math.floor(Math.random() * words.length);
+    selectedWord = words[random];
+  };
+
   return (
     <div className="App">
       <Header />
@@ -54,6 +68,14 @@ function App() {
         <WrongLetters wrongLetters={wrongLetters} />
         <Word selectedWord={selectedWord} correctLetters={correctLetters} />
       </div>
+      <Popup
+        selectedWord={selectedWord}
+        correctLetters={correctLetters}
+        wrongLetters={wrongLetters}
+        setPlayable={setPlayable}
+        playAgain={playAgain}
+      />
+      <Notification showNotification={showNotification} />
     </div>
   );
 }
